@@ -1,0 +1,179 @@
+#ifndef __PI_CALCULATIONS_H_
+#define __PI_CALCULATIONS_H_
+
+//----------------------------------------------------------------------------
+//{ Includes
+//----------------------------------------------------------------------------
+
+	#include "LongArithmetic.h"
+
+//}
+//----------------------------------------------------------------------------
+
+
+//----------------------------------------------------------------------------
+//{ Pi prototypes
+//----------------------------------------------------------------------------
+
+    LongNumber nilakanthaPi(LongNumber iterations);
+
+	LongNumber circleAreaPi(LongNumber pointCount, FileWrap resources);
+
+//}
+//----------------------------------------------------------------------------
+
+
+//----------------------------------------------------------------------------
+//{ Pi calculations
+//----------------------------------------------------------------------------
+
+	LongNumber nilakanthaPi(LongNumber iterations)
+	{
+		// Creating the resources to work with:
+
+			LongNumber pi = LongNumber("[3]", 10);
+			assert(pi.ok());
+
+			LongNumber divisor = LongNumber("[2]", 10);
+			assert(divisor.ok());
+
+		// Main algorithm:
+
+			for (LongNumber currentIteration = LongNumber("[0]", iterations.getRadix()); currentIteration < iterations; currentIteration++)
+			{
+				LongNumber previousPi = pi;
+				assert(previousPi.ok());
+
+				if (currentIteration % LongNumber("[2]", iterations.getRadix()) == LongNumber("[0]", iterations.getRadix()))
+				{
+					pi += LongNumber("[4]", 10) / (divisor++ * divisor++ * divisor);
+				}
+				else
+				{
+					pi -= LongNumber("[4]", 10) / (divisor++ * divisor++ * divisor);
+				}
+
+				pi.setFractionalPart(ACCURACY);
+
+				if (previousPi == pi) break;
+			}
+
+		// Checking output:
+
+			pi.setFractionalPart(PI_ACCURACY);
+			assert(pi.ok());
+
+		// Return statement:
+
+			return pi;
+	}
+
+	LongNumber circleAreaPi(LongNumber pointCount, FileWrap resources)
+	{
+		// Checking input:
+
+			assert(resources.ok());
+			assert(pointCount.getRadix() == 10);
+			assert(pointCount.ok());
+
+		// Creating the resourses to work with:
+
+			LongNumber radius = LongNumber("[1][0]", 10);
+
+			LongNumber pointX = LongNumber("[0].[1][7][3][8][1][8][0][2][1][2]", 10);
+			LongNumber pointY = LongNumber("[6].[7][4][2][9][6][6][0][8][1][7]", 10);
+
+			assert(radius.ok());
+			assert(pointX.ok());
+			assert(pointY.ok());
+
+			LongNumber inCircle = LongNumber("[0]", 10);
+			assert(inCircle.ok());
+
+		// Main algorithm:
+
+			for (LongNumber currentPoint = LongNumber("[0]", 10); currentPoint < pointCount; currentPoint++)
+			{
+				if (pointX.pow(2) + pointY.pow(2) < radius.pow(2)) inCircle++;
+
+				pointX.randomize();
+				pointY.randomize();
+			}
+
+		// Reading from file:
+
+			char* resStr = resources.readFromFile();
+			assert(resStr);
+
+			LongNumber pointCountFromFile = LongNumber(resStr, 10);
+			assert(pointCountFromFile.ok());
+
+			size_t resStrIndex = 0;
+			for (; resStr[resStrIndex] != '\0' && resStr[resStrIndex] != '/'; resStrIndex++)
+			{
+				assert(resStr[resStrIndex] != '\0');
+				assert(resStr[resStrIndex] != '/');
+
+				resStr[resStrIndex] = '_';
+
+			}
+
+			resStr[resStrIndex] = '_';
+
+			LongNumber inCircleFromFile = LongNumber(resStr, 10);
+			assert(inCircleFromFile.ok());
+
+		// Working with data from file:
+
+			pointCount += pointCountFromFile;
+			inCircle += inCircleFromFile;
+
+			LongNumber pi = LongNumber("[4]", 10) * inCircle / pointCount;
+			assert(pi.ok());
+
+		// Saving output to file:
+
+			resources.writeToFile(pointCount.toRaw(), false);
+
+			resources.writeToFile("/", true);
+
+			resources.writeToFile(inCircle.toRaw(), true);
+
+		// Checking output:
+
+			assert(pi.ok());
+
+		// Return statement:
+
+			return pi;
+	}
+
+    LongNumber bellardPi(LongNumber iterations)
+    {
+        // Checking input:
+
+            assert(iterations.ok());
+            assert(iterations.getRadix() == 10);
+
+        // Creating the resources to work with:
+
+            LongNumber pi = LongNumber("[3]", 10);
+            assert(pi.ok());
+
+            LongNumber currentAddentum = LongNumber("[0]", 10);
+            assert(currentAddentum.ok());
+
+        // Main algorithm:
+
+            for (LongNumber currentIteration = LongNumber("[0]", 10); currentIteration < iterations; currentIteration++)
+            {
+                assert(LongNumber("[0]", 10) <= currentIteration && currentIteration < iterations);
+                
+                
+            }
+    }
+
+//}
+//----------------------------------------------------------------------------
+
+#endif
